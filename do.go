@@ -18,7 +18,7 @@ func do() bool {
 		return false
 	}
 
-	data := strings.Split(string(b), "-")
+	data := strings.Split(string(b), "+")
 	for i := range data {
 		id := strings.Split(data[i], "[")
 		if id[0] == ID {
