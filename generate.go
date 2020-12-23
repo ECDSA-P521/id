@@ -17,6 +17,8 @@ func Generate() {
 		} else {
 			os.Exit(0)
 		}
+	} else if ok == "NOM" {
+		return
 	} else {
 		return
 	}
